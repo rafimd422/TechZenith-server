@@ -11,7 +11,7 @@ app.use(express.json());
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_KEY}@cluster0.sopxnju.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -45,13 +45,28 @@ res.send(result)
 })
 
 
-app.get('/products/:id',async(req,res)=>{
-  const id = req.params.id;
-  const query = {brand: id}
-  const products = productCollection.find(query)
-  const result = await products.toArray()
-  res.send(result)
-})
+app.get('/products/:id', async (req, res) => {
+  const brand = req.params.id; 
+  const query = { brand: brand };
+  const products = await productCollection.find(query).toArray();
+  res.send(products);
+});
+
+app.get('/products/id/:id', async (req, res) => {
+  const productId = req.params.id;
+  const query = { _id: new ObjectId(productId) };
+  const product = await productCollection.findOne(query);
+  
+  if (product) {
+    res.send(product);
+  } else {
+    res.status(404).send("Product not found");
+  }
+});
+
+
+
+
 
 
     await client.db("admin").command({ ping: 1 });
