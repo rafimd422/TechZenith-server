@@ -64,6 +64,29 @@ app.get('/products/id/:id', async (req, res) => {
   }
 });
 
+app.put('/products/:id', async (req, res) => {
+  const id = req.params.id;
+  const product = req.body;
+  const filter = { _id: new ObjectId(id) };
+
+  const updateOperation = {
+    $set: {
+      name: product.name,
+      photourl:product.photourl,
+      brand: product.brand,
+      shortdescription: product.shortdescription,
+      rating: product.rating,
+      price: product.price,
+      avaiablity: product.avaiablity,
+    }
+  };
+
+  const result = await productCollection.updateOne(filter, updateOperation);
+
+    res.send(result);
+
+});
+
 
 
 
