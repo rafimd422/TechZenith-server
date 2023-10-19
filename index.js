@@ -29,6 +29,7 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
     const productCollection = client.db("techzenith").collection("products");
+    const cartCollection = client.db("techzenith").collection("cart");
 
 app.post('/products',async(req,res)=>{
   const product = req.body;
@@ -80,15 +81,16 @@ app.put('/products/:id', async (req, res) => {
       avaiablity: product.avaiablity,
     }
   };
-
   const result = await productCollection.updateOne(filter, updateOperation);
-
     res.send(result);
-
 });
-
-
-
+// cart data
+app.post('/cart',async(req,res)=>{
+  const cart = req.body;
+  console.log('our cart added',cart)
+  const result = await cartCollection.insertOne(cart)
+  res.send(result)
+})
 
 
 
