@@ -92,6 +92,12 @@ app.post('/cart',async(req,res)=>{
   res.send(result)
 })
 
+app.get('/cart', async(req,res)=>{
+  const cursor = cartCollection.find()
+  const result = await cursor.toArray()
+  res.send(result)
+})
+
 
 
     await client.db("admin").command({ ping: 1 });
